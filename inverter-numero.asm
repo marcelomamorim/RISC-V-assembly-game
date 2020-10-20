@@ -8,6 +8,7 @@
 			
 LOOP:	li t2, 10
 	rem a0, t1, t2  # resto de t1/t2 = a0
+	beq a0,zero,FINAL
 	mv t3, a0
 	
 	li a7,1   # print int
