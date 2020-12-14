@@ -1,7 +1,16 @@
-## Algumas funcionalidades em Assembly
+## Jogo - The Way of the Exploding Fist
 
-- Calcula métade e dobro
-- Inverter número
+Jogo desenvolvido em grupo para a matéria de Introdução aos Sistemas Computacionais da Universidade de Brasília
 
-## Jogo-Assembly
-Jogo desenvolvido em Assembly - Trabalho de Introdução aos Sistemas Computacionais
+Funcionalidades do Player 1:
+
+- Andar para a direita (d)
+- Andar para a esquerda (a)
+- Chute (c)
+- Pulo centro (w)
+- Pulo esquerda (q)
+- Pulo direita (e)
+- Rolamento (z)
+
+
+## Códigos extras
