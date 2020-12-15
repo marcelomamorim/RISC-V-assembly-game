@@ -109,9 +109,16 @@ END:
 .end_macro
 
 .macro WALK_P1_DIR() # anda para a direita
-	mv t0,a0	# salva em t0 o x do player atual
-	addi s1,s1,8	# x += 8
+	li t0,265
+	bge s1,t0,LIMIT_P1_DIR	# x >= 265
 
+	j MOVE_P1_DIR
+
+LIMIT_P1_DIR:	li s1,272
+				j CONT_WALK_P1_DIR
+MOVE_P1_DIR:	addi s1,s1,8	# x += 8
+
+CONT_WALK_P1_DIR:
 	beqz s2,RIGHT	# orientacao = 0
 
 LEFT:	
@@ -181,8 +188,17 @@ END:
 
 .macro WALK_P1_ESQ() # anda para a esquerda
 	mv t0,a0	# salva em t0 o x do player atual
-	addi s1,s1,-8	# x -= 8
 
+	li t0,4
+	blt s1,t0,LIMIT_P1_DIR	# x < 9
+
+	j MOVE_P1_DIR
+
+LIMIT_P1_DIR:	li s1,0
+				j CONT_WALK_P1_DIR
+MOVE_P1_DIR:	addi s1,s1,-8	# x -= 8
+
+CONT_WALK_P1_DIR:
 	beqz s2,RIGHT	# orientacao = 0
 
 LEFT:
@@ -423,8 +439,15 @@ END:
 .end_macro
 
 .macro KICK_P1_LEFT() # animacao de chute para a esquerda
+li t0,244
+blt s1,t0,CONT_KICK_P1_LEFT	# x < 244
+
+li s1,244
+
+CONT_KICK_P1_LEFT:
 	CHANGE_BACKGROUND_PARTIAL()
 	mv a0,s1
+	addi a0,a0,24
 	PRINT_SPRITE(p1_1_kick1, 30)
 	PRINT_P2()
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -436,6 +459,7 @@ END:
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL()
 	mv a0,s1
+	addi a0,a0,4
 	PRINT_SPRITE(p1_1_kick2, 30)
 	PRINT_P2()
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -447,6 +471,7 @@ END:
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL()
 	mv a0,s1
+	addi a0,a0,24
 	PRINT_SPRITE(p1_1_kick1, 30)
 	PRINT_P2()
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -668,6 +693,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,12
+	VER_JUMP_RIGHT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_0_leftjump6, 50)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -680,6 +706,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,12
+	VER_JUMP_RIGHT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_0_leftjump5, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -692,6 +719,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,12
+	VER_JUMP_RIGHT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_0_leftjump4, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -704,6 +732,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,12
+	VER_JUMP_RIGHT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_0_leftjump3, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -716,6 +745,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,12
+	VER_JUMP_RIGHT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_0_leftjump2, 50)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -736,6 +766,7 @@ END:
 	VER_COUNTDOWN()		# atualiza tempo
 
 	# imprime o player em posicao de ataque nos dois frames
+	VER_WALK_P1_RIGHT()
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
@@ -769,6 +800,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,12
+	VER_JUMP_RIGHT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_1_leftjump2, 50)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -781,6 +813,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,12
+	VER_JUMP_RIGHT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_1_leftjump3, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -793,6 +826,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,12
+	VER_JUMP_RIGHT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_1_leftjump4, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -805,6 +839,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,12
+	VER_JUMP_RIGHT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_1_leftjump5, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -817,6 +852,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,12
+	VER_JUMP_RIGHT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_1_leftjump6, 50)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -837,6 +873,7 @@ END:
 	VER_COUNTDOWN()		# atualiza tempo
 
 	# imprime o player em posicao de ataque nos dois frames
+	VER_WALK_P1_RIGHT()
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
@@ -870,6 +907,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,-12
+	VER_JUMP_LEFT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_0_leftjump2, 50)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -882,6 +920,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,-12
+	VER_JUMP_LEFT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_0_leftjump3, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -894,6 +933,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,-12
+	VER_JUMP_LEFT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_0_leftjump4, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -906,6 +946,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,-12
+	VER_JUMP_LEFT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_0_leftjump5, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -918,6 +959,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,-12
+	VER_JUMP_LEFT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_0_leftjump6, 50)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -971,6 +1013,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,-12
+	VER_JUMP_LEFT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_1_leftjump6, 50)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -983,6 +1026,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,-12
+	VER_JUMP_LEFT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_1_leftjump5, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -995,6 +1039,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,-12
+	VER_JUMP_LEFT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_1_leftjump4, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -1007,6 +1052,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,-12
+	VER_JUMP_LEFT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_1_leftjump3, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -1019,6 +1065,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
 	addi s1,s1,-12
+	VER_JUMP_LEFT_P1()
 	mv a0,s1
 	PRINT_SPRITE(p1_1_leftjump2, 50)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1

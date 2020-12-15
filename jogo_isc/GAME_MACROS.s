@@ -257,7 +257,7 @@ EXIT_CN:
 
 .macro VER_COUNTDOWN() # verifica se atualiza countdown
 	li t1,10			# FPS
-	bne s0,t1,END	# não soma cronômetro (10FPS)
+	bne s0,t1,END	# nao soma cronômetro (10FPS)
 
 	addi s9,s9,-1		# tempo--
 	li s0,0			# reseta o contador de frames
@@ -534,29 +534,62 @@ REVERSE:
 	li s2,1
 	li s6,0
 	j END
-
-	li t0,0xFF200604	# Escolhe o frame 0 ou 1
-	sw s11,0(t0)		# Troca de frame
-
-	xori s11,s11,0x0001
-	CHANGE_BACKGROUND_PARTIAL()
-	PRINT_P2()
-	PRINT_P1()
-	li t0,0xFF200604	# Escolhe o frame 0 ou 1
-	sw s11,0(t0)		# Troca de frame
-
 ORIGINAL:
 	li s2,0
 	li s6,1
-
-	li t0,0xFF200604	# Escolhe o frame 0 ou 1
-	sw s11,0(t0)		# Troca de frame
-	
-	xori s11,s11,0x0001
-	CHANGE_BACKGROUND_PARTIAL()
+END:
 	PRINT_P2()
 	PRINT_P1()
+.end_macro
 
+.macro VER_JUMP_LEFT_P1() # verifica e atualiza para o pulo para a esquerda nao sair do mapa
+	bltz s1,LIMIT
+	j END
+
+LIMIT: li s1,0
 END:
+.end_macro
 
+.macro VER_JUMP_LEFT_P2() # verifica e atualiza para o pulo para a esquerda nao sair do mapa
+	bltz s5,LIMIT
+	j END
+
+LIMIT: li s5,0
+END:
+.end_macro
+
+.macro VER_JUMP_RIGHT_P1() # verifica e atualiza para o pulo para a direita nao sair do mapa
+	li t0,273
+	bge s1,t0,LIMIT
+	j END
+	
+LIMIT: li s1,273
+END:
+.end_macro
+
+.macro VER_JUMP_RIGHT_P2() # verifica e atualiza para o pulo para a direita nao sair do mapa
+	li t0,273
+	bge s5,t0,LIMIT
+	j END
+	
+LIMIT: li s5,273
+END:
+.end_macro
+
+.macro VER_WALK_P1_RIGHT() # verifica e atualiza player em posicao de ataque para nao sair do mapa
+	li t0,272
+	bge s1,t0,LIMIT
+	j END
+	
+LIMIT: li s1,272
+END:
+.end_macro
+
+.macro VER_WALK_P2_RIGHT() # verifica e atualiza player em posicao de ataque para nao sair do mapa
+	li t0,272
+	bge s5,t0,LIMIT
+	j END
+	
+LIMIT: li s5,272
+END:
 .end_macro

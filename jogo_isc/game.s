@@ -15,8 +15,8 @@ dan: .string "DAN"
 oneplayer: .string "1 PLAYER"
 
 ### JOGO ###
-.text	
-	# inicializa os dados para a primeira fase (remover isso pq t� l� na frente, s� pra ir testando por agora)
+.text
+	# inicializa os dados para a primeira fase (remover isso pq ta la na frente, so pra ir testando por agora)
 	### PLAYER 1 ###
 	li s1,0	# p1_x-axis
 	li s2,0	# p1_orientation
@@ -135,7 +135,7 @@ FINISH_GAME:
 	DEFEAT_P2()
 	FINISH_P1()
 
-	addi s10,s10,1	# prpximo level (max: 10TH DAN)
+	addi s10,s10,1	# proximo level (max: 10TH DAN)
 	
 	la t0,GAME
 	jr t0
@@ -147,11 +147,6 @@ GAMELOOP:
 	sw s11,0(t0)		# troca de frame
 	
 	xori s11,s11,0x0001	# inverte o frame atual
-	
-	ADD_FRAME_COUNTDOWN()	# contador de frames++
-	VER_COUNTDOWN()		# atualiza tempo
-	
-	#REVERSE_PLAYERS()	# verifica a orientacao dos players
 	
 	# Verifica se o player pressionou alguma tecla
 	li t1,0xFF200000		# carrega o endereco de controle do KDMMIO
@@ -183,7 +178,7 @@ GAMELOOP:
 	li t0,122		# z
 	beq t2,t0,T_P1_ROLAMENTO # rolamento
 	
-	li t0,119		# z
+	li t0,119		# w
 	beq t2,t0,T_P1_JUMP_CENTER # rolamento
 	
 	
@@ -192,7 +187,7 @@ GAMELOOP:
 	#jr t0
 	j NO_KEY
 
-T_NO_KEY:	# prefixo T pois o beq n�o suporta o tamanho do LABEL
+T_NO_KEY:	# prefixo T pois o beq nao suporta o tamanho do LABEL
 	la t0,NO_KEY
 	jr t0
 T_P1_ESQ:
@@ -268,17 +263,13 @@ PUNCH_FINISH_GAME:
 ### KICK ###
 P1_KICK:
 	KICK_P1()
-	sub t0,s1,s5
+	sub t0,s5,s1
 	
 	bltz t0,KICK_ABS # dist < 0
 	j P1_KICK_CONT
 KICK_ABS:
 	li t1,-1
 	mul t2,t0,t1
-	
-	li a7,1
-	mv a0,t0
-	ecall
 	
 P1_KICK_CONT:
 	
@@ -293,8 +284,10 @@ NO_KEY:
 CONT_GAMELOOP:
 	REVERSE_PLAYERS()
 	
-	beqz s9,EMPATE	# tempo acabou
-	
+	ADD_FRAME_COUNTDOWN()	# contador de frames++
+	VER_COUNTDOWN()		# atualiza tempo
+	#beqz s9,EMPATE	# tempo acabou
+
 	la t0,GAMELOOP
 	jr t0
 
@@ -306,7 +299,7 @@ EMPATE: DRAW()
 	la t0,LOAD_LEVEL
 	jr t0
 
-LOAD_LEVEL:	# carrega o nivel (s10)
+LOAD_LEVEL: # carrega o nivel (s10)
 	beqz s10,T_MAP1	# se for 0 vai pro mapa 1 (novice)
 	
 	# multiplo de 4 = mapa 4
@@ -357,14 +350,14 @@ MAP4:	CHANGE_BACKGROUND(map4)
 	jr t0
 
 RESET:	# RESETA VALORES (ambos os frames)
-	li s1,60	# p1_x-axis
+	li s1,200	# p1_x-axis
 	li s2,0		# p1_orientation
 	li s3,0		# p1_yinyang-points
 	li s5,212 	# p2_x-axis
 	li s6,1 	# p2_orientation
 	li s7,0 	# p2_yinyang-points
 	li s9,30 	# countdown
-	li s0,0		# aux. cron�metro
+	li s0,0		# aux. cronometro
 	li s11,0 	# frame atual
 		
 	PRINT_SCORE()
