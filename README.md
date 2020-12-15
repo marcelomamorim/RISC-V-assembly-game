@@ -7,10 +7,12 @@ Funcionalidades do Player 1:
 - Andar para a direita (d)
 - Andar para a esquerda (a)
 - Chute (c)
-- Pulo centro (w)
+- Pulo central (w)
 - Pulo esquerda (q)
 - Pulo direita (e)
 - Rolamento (z)
 
 
 ## Códigos extras
+- Próximo nível (n)
+- Nível anterior (b)
