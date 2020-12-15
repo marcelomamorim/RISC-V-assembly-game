@@ -593,3 +593,56 @@ END:
 LIMIT: li s5,272
 END:
 .end_macro
+
+### DEVELOPMENT / TEST ###
+.macro ANIMATION_TEST() # testa as animações in-game de ambos os players
+	li s1,100	# x do player 1
+	
+	li s2,0
+	PRINT_P1()
+    WALK_P1_ESQ()
+    WALK_P1_DIR()
+    JUMP_P1_LEFT()
+    JUMP_P1_RIGHT()
+    PUNCH_P1()
+    KICK_P1()
+	PRINT_P1_DEFEATED()
+	DEFEAT_P1()
+	FINISH_P1()
+    li s2,1
+	PRINT_P1()
+    WALK_P1_ESQ()
+    WALK_P1_DIR()
+    JUMP_P1_LEFT()
+    JUMP_P1_RIGHT()
+    PUNCH_P1()
+    KICK_P1()
+	PRINT_P1_DEFEATED()
+	DEFEAT_P1()
+	FINISH_P1()
+
+	li s5,200	# x do player 2
+	li s6,0
+	PRINT_P2()
+    WALK_P2_ESQ()
+    WALK_P2_DIR()
+    JUMP_P2_LEFT()
+    JUMP_P2_RIGHT()
+    PUNCH_P2()
+    KICK_P2()
+	PRINT_P2_DEFEATED()
+	DEFEAT_P2()
+	FINISH_P2()
+    li s6,1
+	PRINT_P2()
+    WALK_P2_ESQ()
+    WALK_P2_DIR()
+    JUMP_P2_LEFT()
+    JUMP_P2_RIGHT()
+    PUNCH_P2()
+    KICK_P2()
+	PRINT_P2_DEFEATED()
+	DEFEAT_P2()
+	FINISH_P2()
+	
+.end_macro

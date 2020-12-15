@@ -350,7 +350,7 @@ MAP4:	CHANGE_BACKGROUND(map4)
 	jr t0
 
 RESET:	# RESETA VALORES (ambos os frames)
-	li s1,200	# p1_x-axis
+	li s1,60	# p1_x-axis
 	li s2,0		# p1_orientation
 	li s3,0		# p1_yinyang-points
 	li s5,212 	# p2_x-axis
