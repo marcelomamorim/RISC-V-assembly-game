@@ -286,7 +286,7 @@ CONT_GAMELOOP:
 	
 	ADD_FRAME_COUNTDOWN()	# contador de frames++
 	VER_COUNTDOWN()		# atualiza tempo
-	#beqz s9,EMPATE	# tempo acabou
+	beqz s9,EMPATE	# tempo acabou
 
 	la t0,GAMELOOP
 	jr t0
