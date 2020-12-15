@@ -15,9 +15,9 @@ END:
 	mv a0,s5	# x do player 1
 	beqz s6,RIGHT
 
-LEFT:	PRINT_SPRITE(p2_1_defeat4, 30)
+LEFT:	PRINT_SPRITE(p2_0_defeat4, 30)
 	j END
-RIGHT:	PRINT_SPRITE(p2_0_defeat4, 30)
+RIGHT:	PRINT_SPRITE(p2_1_defeat4, 30)
 	j END
 END:
 .end_macro

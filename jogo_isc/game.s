@@ -16,28 +16,10 @@ oneplayer: .string "1 PLAYER"
 
 ### JOGO ###
 .text
-	# inicializa os dados para a primeira fase (remover isso pq ta la na frente, so pra ir testando por agora)
-	### PLAYER 1 ###
-	li s1,0	# p1_x-axis
-	li s2,0	# p1_orientation
-	li s3,0 # p1_yinyang-points
-	li s4,0 # p1_score-points
-	
-	### PLAYER 2 ###
-	li s5,0 # p2_x-axis
-	li s6,1 # p2_orientation
-	li s7,0 # p2_yinyang-points
-	li a0,30
-	
-	### GAME ###
-	li s8,0		# contador de frames
-	li s9,30 	# countdown
-	li s10,9	# fase 0
-	li s11,0	# frame 0
 	
 	# comente para ver o menu inicial
-	la t0,GAME
-	jr t0
+	#la t0,GAME
+	#jr t0
 	
 	li s11,0		# frame 0
 	CHANGE_BACKGROUND(home_screen)
@@ -131,15 +113,34 @@ GAME:
 	la t0,LOAD_LEVEL
 	jr t0
 	
-FINISH_GAME:
+FINISH_GAME_P1: # termina a fase com o player 1 como vencedor
+	addi s4,s4,100	# adiciona 100 pontos ao score
+	addi s3,s3,1	# p1_yinyang++
+	YIN_YANG()	# atualiza os yinyang atual
+	
 	DEFEAT_P2()
 	FINISH_P1()
-
-	addi s10,s10,1	# proximo level (max: 10TH DAN)
 	
-	la t0,GAME
+	COUNTDOWN_POINTS()	# animacao dos pontos do cronometro
+	
+	li t0,4
+	bge s3,t0,T_NEXT_LEVEL	# se p1_yinyang >= 4, proxima fase
+	j CONT_FINISH_GAME_P1
+	
+T_NEXT_LEVEL: # intermediario pois o endereço eh muito longo
+	la t0,NEXT_LEVEL
 	jr t0
 	
+CONT_FINISH_GAME_P1:
+	la t0,GAME
+	jr t0
+
+NEXT_LEVEL: # carrega a próxima fase
+	addi s10,s10,1	# proximo level (max: 10TH DAN)
+	
+	la t0,RESET_LEVEL
+	jr t0
+
 ### GAMELOOP ###
 GAMELOOP:
 	# Switch frame
@@ -155,7 +156,7 @@ GAMELOOP:
    	beq t0,zero,T_NO_KEY   		# se nenhuma tecla foi pressionada continua o GAMELOOP
 	
 	# pressionou uma tecla
-	lw t2,4(t1)  	# le o valor da tecla tecla
+	lw t2,4(t1)  		# le o valor da tecla tecla
 	
 	li t0,97		# a
 	beq t2,t0,T_P1_ESQ	# anda para a esquerda	
@@ -176,17 +177,19 @@ GAMELOOP:
 	beq t2,t0,T_P1_JUMP_RIGHT# pulo para a direita
 	
 	li t0,122		# z
-	beq t2,t0,T_P1_ROLAMENTO # rolamento
+	beq t2,t0,T_P1_ROLL	# rolamento
 	
-	li t0,119		# w
-	beq t2,t0,T_P1_JUMP_CENTER # rolamento
+	li t0,119		  	# w
+	beq t2,t0,T_P1_JUMP_CENTER 	# pulo central
 	
+	li t0,110		  	# n
+	beq t2,t0,CHEAT_NEXT_LEVEL 	# próxima fase
+	
+	li t0,98		  	# b
+	beq t2,t0,CHEAT_PREV_LEVEL 	# fase anterior
 	
 	# tecla nao identificada
 	
-	#jr t0
-	j NO_KEY
-
 T_NO_KEY:	# prefixo T pois o beq nao suporta o tamanho do LABEL
 	la t0,NO_KEY
 	jr t0
@@ -211,11 +214,20 @@ T_P1_JUMP_RIGHT:
 T_P1_JUMP_CENTER:
 	la t0,P1_JUMP_CENTER
 	jr t0
-T_P1_ROLAMENTO:
-	la t0,P1_ROLAMENTO
+T_P1_ROLL:
+	la t0,P1_ROLL
 	jr t0
 
-
+CHEAT_NEXT_LEVEL:
+	addi s10,s10,1	# level++
+	la t0,LOAD_LEVEL
+	jr t0
+	
+CHEAT_PREV_LEVEL:
+	addi s10,s10,-1	# level--
+	la t0,LOAD_LEVEL
+	jr t0
+	
 P1_ESQ:	WALK_P1_ESQ()
 	la t0,CONT_GAMELOOP
 	jr t0
@@ -231,53 +243,34 @@ P1_JUMP_RIGHT: JUMP_P1_RIGHT()
 P1_JUMP_CENTER: JUMP_P1_CENTER()
 	la t0,CONT_GAMELOOP
 	jr t0
-P1_ROLAMENTO:	ROLAMENTO()
+P1_ROLL:ROLL_P1()
 	la t0,CONT_GAMELOOP
 	jr t0
+	
 ### PUNCH ###
 P1_PUNCH:PUNCH_P1()
-	# verifica distancia
-	mv t0,s5
-	sub t1,t0,s1
-	
-	bltz t1,PUNCH_ABS	# dist < 0
-	j P1_PUNCH_CONT
-	
-PUNCH_ABS:	li t0,-1
-	mul t3,t1,t0	# dist * (-1)
-	
-	#mv a0,t3
-	#li a7,1
-	#ecall
-	
-P1_PUNCH_CONT:
-	li t2,33
-	blt t1,t2,PUNCH_FINISH_GAME	# dist <= 32
+	VER_DIST()	# verifica distancia
+
+	li t2,37
+	blt a0,t2,PUNCH_FINISH_GAME	# dist <= 36
 
 	la t0,CONT_GAMELOOP
 	jr t0
 PUNCH_FINISH_GAME:
-	la t0,FINISH_GAME
+	la t0,FINISH_GAME_P1
 	jr t0
 
 ### KICK ###
-P1_KICK:
-	KICK_P1()
-	sub t0,s5,s1
-	
-	bltz t0,KICK_ABS # dist < 0
-	j P1_KICK_CONT
-KICK_ABS:
-	li t1,-1
-	mul t2,t0,t1
-	
-P1_KICK_CONT:
+P1_KICK:KICK_P1()
+	VER_DIST()			# verifica distancia
+	li t0,49			# range do chute
+	blt a0,t0,KICK_FINISH_GAME	# dist <= 48 finaliza a fase atual
 	
 	la t0,CONT_GAMELOOP
 	jr t0
 
 KICK_FINISH_GAME:
-	la t0,FINISH_GAME
+	la t0,FINISH_GAME_P1
 	jr t0
 	
 NO_KEY:
@@ -298,6 +291,10 @@ FINISH_GAMELOOP:	# faz algo
 EMPATE: DRAW()
 	la t0,LOAD_LEVEL
 	jr t0
+
+RESET_LEVEL: # reseta o nível por completo
+	li s3,0	# p2_yinyang
+	li s7,0	# p2_yinyang
 
 LOAD_LEVEL: # carrega o nivel (s10)
 	beqz s10,T_MAP1	# se for 0 vai pro mapa 1 (novice)
@@ -328,22 +325,26 @@ T_MAP3:	la t0,MAP3
 T_MAP4:	la t0,MAP4
 	jr t0
 
-MAP1:	CHANGE_BACKGROUND(map1)
+MAP1:	li s11,0
+	CHANGE_BACKGROUND(map1)
 	li s11,1
 	CHANGE_BACKGROUND(map1)
 	la t0,RESET
 	jr t0
-MAP2:	CHANGE_BACKGROUND(map2)
+MAP2:	li s11,0
+	CHANGE_BACKGROUND(map2)
 	li s11,1
 	CHANGE_BACKGROUND(map2)
 	la t0,RESET
 	jr t0
-MAP3:	CHANGE_BACKGROUND(map3)
+MAP3:	li s11,0
+	CHANGE_BACKGROUND(map3)
 	li s11,1
 	CHANGE_BACKGROUND(map3)
 	la t0,RESET
 	jr t0
-MAP4:	CHANGE_BACKGROUND(map4)
+MAP4:	li s11,0
+	CHANGE_BACKGROUND(map4)
 	li s11,1
 	CHANGE_BACKGROUND(map4)
 	la t0,RESET
@@ -352,10 +353,8 @@ MAP4:	CHANGE_BACKGROUND(map4)
 RESET:	# RESETA VALORES (ambos os frames)
 	li s1,60	# p1_x-axis
 	li s2,0		# p1_orientation
-	li s3,0		# p1_yinyang-points
 	li s5,212 	# p2_x-axis
 	li s6,1 	# p2_orientation
-	li s7,0 	# p2_yinyang-points
 	li s9,30 	# countdown
 	li s0,0		# aux. cronometro
 	li s11,0 	# frame atual
@@ -383,7 +382,7 @@ RESET:	# RESETA VALORES (ambos os frames)
 	YIN_YANG()
 	COUNTDOWN()
 	
-	GREET()	# animacao de cumprimento
+	GREET()		# animacao de cumprimento
 	
 	la t0,GAMELOOP
 	jr t0
