@@ -1,4 +1,4 @@
-# MACROS para fun��es do jogo em geral
+# MACROS para funcoes do jogo em geral
 
 .macro SLEEP (%x) # Para a execucao por X ms
     li a7,32
