@@ -2,7 +2,7 @@
 .include "./GAME_MACROS.s"
 .include "./animations_player1.s"
 .include "./animations_player2.s"
-
+.include "./musics/musicaprincipal.s"
 .data
 .include "./sprites.s"
 
@@ -16,6 +16,8 @@ oneplayer: .string "1 PLAYER"
 
 ### JOGO ###
 .text
+	
+	# comente para ver o menu inicial
 	#la t0,GAME
 	#jr t0
 	
@@ -26,14 +28,41 @@ oneplayer: .string "1 PLAYER"
 	
 	li s4,1		# quantidade incrementada (1 ou -1)
 	li s5,0		# frame atual do Shitake
+	li s6,275	# x_axis do Shitake
+MUSIC_LOOP:
+	### Carrega info para a musica ###
+	li s7,0			# zera o contador de notas
+	la s0,TAMANHO		# define o endereço do número de notas
+	lw s1,0(s0)		# le o numero de notas
+	la s0,NOTAS		# define o endereço das notas
+	li a3,127		# define o volume
+	###
+MENU_LOOP: 	
+	### TOCA NOTA ###
+	beq s7,s1,MUSIC_LOOP
+	lw a0,0(s0)		# le o valor da nota
+	lw a1,4(s0)		# le a duracao da nota
+	li a7,31		# define a chamada de syscall
+	li a2,2			# define o instrumento
+	ecall			# toca a nota
+	mv a0,a1		# passa a duração da nota para a pausa
+	li a7,32		# define a chamada de syscal 
+	ecall			# realiza uma pausa de a0 ms
+	addi s0,s0,8		# incrementa para o endereço da próxima nota
+	addi s7,s7,1		# incrementa o contador de notas
+	#################
 	
-MENU_LOOP:
 	li t0,0xFF200604	# escolhe o frame 0 ou 1
 	sw s11,0(t0)		# troca de frame
 	xori s11,s11,0x0001	# inverte o frame
-
 	j IMPRIME_SHITAKE	# imprime frame atual do Shitake
 CONT_LOOP:
+	
+	
+	xori s9,s9,0x0001	# escolhe a outra frame
+	
+	addi s6,s6,4
+	
 	add s5,s5,s4	# incrementa frame (+ / -)
 	li t1,6
 	beq s5,t1,SUB_FRAME_SHITAKE 	# frame--
@@ -45,24 +74,6 @@ CONT_LOOP2:
    	andi t0,t0,0x0001	# mascara o bit menos significativo
    	beq t0,zero,MENU_LOOP	# nao tem tecla pressionada entao volta ao loop
    	lw t2,4(t1)		# le o valor da tecla
-
-	# inicializa os dados para a primeira fase
-	### PLAYER 1 ###
-	li s1,0	# p1_x-axis
-	li s2,0	# p1_orientation
-	li s3,0 # p1_yinyang-points
-	li s4,0 # p1_score-points
-	
-	### PLAYER 2 ###
-	li s5,0 # p2_x-axis
-	li s6,1 # p2_orientation
-	li s7,0 # p2_yinyang-points
-	
-	### GAME ###
-	li s8,0		# contador de frames
-	li s9,30 	# countdown
-	li s10,0	# fase 0
-	li s11,0	# frame 0
 	
 	la t0,GAME
 	jr t0
@@ -73,7 +84,7 @@ SUB_FRAME_SHITAKE: 	li s4,-1
 			j CONT_LOOP2
 IMPRIME_SHITAKE:
 	li a0,275	# x_axis do Shitake
-	PRINT_SPRITE(sand_cat, 2) # apaga o frame anterior do Shitake
+	PRINT_SPRITE(sand_cat, 2) # apaga o frame anterior do do Shitake
 	
 	li a0,275	# x_axis do Shitake
         li t0,0
@@ -103,6 +114,26 @@ SHITAKE6:    	PRINT_SPRITE(shitake6, 2)
 
 ### GAME INFO ###
 GAME:
+	# inicializa os dados para a primeira fase
+	### PLAYER 1 ###
+	li s1,0	# p1_x-axis
+	li s2,0	# p1_orientation
+	li s3,0 # p1_yinyang-points
+	li s4,0 # p1_score-points
+	
+	### PLAYER 2 ###
+	li s5,0 # p2_x-axis
+	li s6,1 # p2_orientation
+	li s7,0 # p2_yinyang-points
+	
+	### GAME ###
+	li s8,0		# contador de frames
+	li s9,30 	# countdown
+	li s10,0	# fase 0
+	li s11,0	# frame 0
+
+	###
+
 	la t0,LOAD_LEVEL
 	jr t0
 	
@@ -120,7 +151,7 @@ FINISH_GAME_P1: # termina a fase com o player 1 como vencedor
 	bge s3,t0,T_NEXT_LEVEL	# se p1_yinyang >= 4, proxima fase
 	j CONT_FINISH_GAME_P1
 	
-T_NEXT_LEVEL: # intermediario pois o endereco eh muito longo
+T_NEXT_LEVEL: # intermediario pois o endereço eh muito longo
 	la t0,NEXT_LEVEL
 	jr t0
 	
@@ -128,7 +159,7 @@ CONT_FINISH_GAME_P1:
 	la t0,GAME
 	jr t0
 
-NEXT_LEVEL: # carrega a proxima fase
+NEXT_LEVEL: # carrega a próxima fase
 	addi s10,s10,1	# proximo level (max: 10TH DAN)
 	
 	la t0,RESET_LEVEL
@@ -176,7 +207,7 @@ GAMELOOP:
 	beq t2,t0,T_P1_JUMP_CENTER 	# pulo central
 	
 	li t0,110		  	# n
-	beq t2,t0,CHEAT_NEXT_LEVEL 	# prï¿½xima fase
+	beq t2,t0,CHEAT_NEXT_LEVEL 	# próxima fase
 	
 	li t0,98		  	# b
 	beq t2,t0,CHEAT_PREV_LEVEL 	# fase anterior
@@ -285,7 +316,7 @@ EMPATE: DRAW()
 	la t0,LOAD_LEVEL
 	jr t0
 
-RESET_LEVEL: # reseta o nï¿½vel por completo
+RESET_LEVEL: # reseta o nível por completo
 	li s3,0	# p2_yinyang
 	li s7,0	# p2_yinyang
 
