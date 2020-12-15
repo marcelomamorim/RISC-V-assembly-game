@@ -16,8 +16,6 @@ oneplayer: .string "1 PLAYER"
 
 ### JOGO ###
 .text
-	
-	# comente para ver o menu inicial
 	#la t0,GAME
 	#jr t0
 	
@@ -28,19 +26,14 @@ oneplayer: .string "1 PLAYER"
 	
 	li s4,1		# quantidade incrementada (1 ou -1)
 	li s5,0		# frame atual do Shitake
-	li s6,275	# x_axis do Shitake
 	
-MENU_LOOP: 	
+MENU_LOOP:
 	li t0,0xFF200604	# escolhe o frame 0 ou 1
 	sw s11,0(t0)		# troca de frame
 	xori s11,s11,0x0001	# inverte o frame
 
 	j IMPRIME_SHITAKE	# imprime frame atual do Shitake
 CONT_LOOP:
-	xori s9,s9,0x0001	# escolhe a outra frame
-	
-	addi s6,s6,4
-	
 	add s5,s5,s4	# incrementa frame (+ / -)
 	li t1,6
 	beq s5,t1,SUB_FRAME_SHITAKE 	# frame--
@@ -80,7 +73,7 @@ SUB_FRAME_SHITAKE: 	li s4,-1
 			j CONT_LOOP2
 IMPRIME_SHITAKE:
 	li a0,275	# x_axis do Shitake
-	PRINT_SPRITE(sand_cat, 2) # apaga o frame anterior do do Shitake
+	PRINT_SPRITE(sand_cat, 2) # apaga o frame anterior do Shitake
 	
 	li a0,275	# x_axis do Shitake
         li t0,0
@@ -127,7 +120,7 @@ FINISH_GAME_P1: # termina a fase com o player 1 como vencedor
 	bge s3,t0,T_NEXT_LEVEL	# se p1_yinyang >= 4, proxima fase
 	j CONT_FINISH_GAME_P1
 	
-T_NEXT_LEVEL: # intermediario pois o endereço eh muito longo
+T_NEXT_LEVEL: # intermediario pois o endereco eh muito longo
 	la t0,NEXT_LEVEL
 	jr t0
 	
@@ -135,7 +128,7 @@ CONT_FINISH_GAME_P1:
 	la t0,GAME
 	jr t0
 
-NEXT_LEVEL: # carrega a próxima fase
+NEXT_LEVEL: # carrega a proxima fase
 	addi s10,s10,1	# proximo level (max: 10TH DAN)
 	
 	la t0,RESET_LEVEL
@@ -183,7 +176,7 @@ GAMELOOP:
 	beq t2,t0,T_P1_JUMP_CENTER 	# pulo central
 	
 	li t0,110		  	# n
-	beq t2,t0,CHEAT_NEXT_LEVEL 	# próxima fase
+	beq t2,t0,CHEAT_NEXT_LEVEL 	# prï¿½xima fase
 	
 	li t0,98		  	# b
 	beq t2,t0,CHEAT_PREV_LEVEL 	# fase anterior
@@ -292,7 +285,7 @@ EMPATE: DRAW()
 	la t0,LOAD_LEVEL
 	jr t0
 
-RESET_LEVEL: # reseta o nível por completo
+RESET_LEVEL: # reseta o nï¿½vel por completo
 	li s3,0	# p2_yinyang
 	li s7,0	# p2_yinyang
 
