@@ -524,10 +524,10 @@ END:	li s11,0	# retorna no frame 0
 .end_macro
 
 .macro REVERSE_PLAYERS() # inverte a orientação dos players, se for o caso
-	mv t0,s5	# x do player 2
+	mv t0,s5		# x do player 2
 	addi t0,t0,16	# range para inverter
 
-	bge s1,t0,REVERSE	# se x1 >= x2-32
+	bge s1,t0,REVERSE	# se x1 >= x2-16
 	j ORIGINAL
 
 REVERSE:
@@ -538,8 +538,18 @@ ORIGINAL:
 	li s2,0
 	li s6,1
 END:
+	CHANGE_BACKGROUND_PARTIAL()
 	PRINT_P2()
 	PRINT_P1()
+	li t0,0xFF200604	# Escolhe o frame 0 ou 1
+	sw s11,0(t0)		# Troca de frame
+
+	xori s11,s11,0x001	# inverte o frame atual
+	CHANGE_BACKGROUND_PARTIAL()
+	PRINT_P2()
+	PRINT_P1()
+	li t0,0xFF200604	# Escolhe o frame 0 ou 1
+	sw s11,0(t0)		# Troca de frame
 .end_macro
 
 .macro VER_JUMP_LEFT_P1() # verifica e atualiza para o pulo para a esquerda nao sair do mapa
@@ -591,6 +601,31 @@ END:
 	j END
 	
 LIMIT: li s5,272
+END:
+.end_macro
+
+.macro VER_DIST() # verifica a distância entre os dois players e retorna no a0
+	sub t0,s5,s1	# t0 = x2 - x1
+	mv t1,t0		# copia o valor de t0
+	
+	bltz t0,ABS	# dist < 0
+	j END
+
+ABS:li t2,-1
+	mul t1,t2,t0	# dist *= (-1)
+
+END: mv a0,t1		# retorna a distância em a0
+.end_macro
+
+.macro COUNTDOWN_POINTS() # pega os pontos do countdown com a animação do countdown descendo e o score subindo a cada frame	
+LOOP:
+	beqz s9,END		# se time == 0 encerra
+	addi s9,s9,-1	# time--
+	addi s4,s4,10	# p1_score += 10
+	COUNTDOWN() 	# atualiza countdown
+	PRINT_SCORE()	# atualiza score
+	SLEEP(50)
+	j LOOP
 END:
 .end_macro
 

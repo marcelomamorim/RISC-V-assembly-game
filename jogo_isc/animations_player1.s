@@ -1118,7 +1118,6 @@ END:
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
-	addi s1,s1,0
 	mv a0,s1
 	PRINT_SPRITE(p1_0_jump2, 50)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -1130,7 +1129,6 @@ END:
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
-	addi s1,s1,0
 	mv a0,s1
 	PRINT_SPRITE(p1_0_jump3, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -1138,11 +1136,9 @@ END:
 
 	ADD_FRAME_COUNTDOWN()	# contador de frames++
 	VER_COUNTDOWN()		# atualiza tempo
-	
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
-	addi s1,s1,-12
 	mv a0,s1
 	PRINT_SPRITE(p1_0_jump4, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -1154,7 +1150,7 @@ END:
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
-	addi s1,s1,0
+	
 	mv a0,s1
 	PRINT_SPRITE(p1_0_jump5, 80)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -1166,7 +1162,7 @@ END:
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL_JUMP()
 	PRINT_P2()
-	addi s1,s1,0
+	
 	mv a0,s1
 	PRINT_SPRITE(p1_0_jump6, 50)
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
@@ -1205,7 +1201,7 @@ END:
 	li s11,0		# retorna no frame 0
 .end_macro
 
-.macro ROLAMENTO() # animacao de rolamento - judô
+.macro ROLL_P1() # animacao de rolamento - judô
 	CHANGE_BACKGROUND_PARTIAL()
 	mv a0,s1
 	PRINT_SPRITE(p1_0_jump6, 30)
