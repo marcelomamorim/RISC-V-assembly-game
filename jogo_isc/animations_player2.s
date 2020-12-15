@@ -218,6 +218,9 @@ END:
 	ADD_FRAME_COUNTDOWN()	# contador de frames++
 	VER_COUNTDOWN()			# atualiza tempo
 
+	# Som de Soco
+	soco()
+
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL()
 	mv a0,s5
@@ -228,6 +231,7 @@ END:
 
 	ADD_FRAME_COUNTDOWN()	# contador de frames++
 	VER_COUNTDOWN()			# atualiza tempo
+
 
 	# imprime o player em posicao de ataque nos dois frames
 	xori s11,s11,0x001	# inverte o frame atual
@@ -269,6 +273,9 @@ END:
 
 	ADD_FRAME_COUNTDOWN()	# contador de frames++
 	VER_COUNTDOWN()			# atualiza tempo
+
+	# Som de Soco
+	soco()
 
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL()
@@ -321,6 +328,9 @@ END:
 
 	ADD_FRAME_COUNTDOWN()	# contador de frames++
 	VER_COUNTDOWN()			# atualiza tempo
+
+	#Som de Chute
+	chute()
 
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL()
@@ -381,6 +391,9 @@ CONT_KICK_P2_LEFT:
 
 	ADD_FRAME_COUNTDOWN()	# contador de frames++
 	VER_COUNTDOWN()			# atualiza tempo
+
+	#Som de Chute
+	chute()
 
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL()

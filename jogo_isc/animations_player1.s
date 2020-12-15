@@ -1,4 +1,8 @@
 # MACROS para animacoes do player 1
+.include "./musics/soco.s"
+.include "./musics/chute.s"
+
+
 
 .macro GREET()	# cumprimentos no inicio de um nivel
 	xori s11,s11,0x001	# inverte o frame atual
@@ -304,6 +308,9 @@ END:
 	ADD_FRAME_COUNTDOWN()	# contador de frames++
 	VER_COUNTDOWN()			# atualiza tempo
 
+	# Som de Soco
+	soco()
+
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL()
 	mv a0,s1
@@ -330,7 +337,7 @@ END:
 	CHANGE_BACKGROUND_PARTIAL()
 	PRINT_P2()
 	PRINT_P1()
-
+	
 	li s11,0		# retorna no frame 0
 .end_macro
 
@@ -354,7 +361,10 @@ END:
 	sw s11,0(t0)		# Troca de frame
 
 	ADD_FRAME_COUNTDOWN()	# contador de frames++
-	VER_COUNTDOWN()			# atualiza tempo
+	VER_COUNTDOWN()		# atualiza tempo
+	
+	# Som de Soco
+	soco()
 
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL()
@@ -383,6 +393,7 @@ END:
 	PRINT_P2()
 	PRINT_P1()
 
+
 	li s11,0		# retorna no frame 0
 .end_macro
 
@@ -407,6 +418,9 @@ END:
 
 	ADD_FRAME_COUNTDOWN()	# contador de frames++
 	VER_COUNTDOWN()			# atualiza tempo
+
+	#Som de Chute
+	chute()
 
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL()
@@ -467,7 +481,10 @@ CONT_KICK_P1_LEFT:
 
 	ADD_FRAME_COUNTDOWN()	# contador de frames++
 	VER_COUNTDOWN()			# atualiza tempo
-
+	
+	#Som de Chute
+	chute()
+	
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL()
 	mv a0,s1
