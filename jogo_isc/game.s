@@ -174,11 +174,7 @@ GAMELOOP:
 	
 	xori s11,s11,0x0001	# inverte o frame atual
 	
-	### Lógica do Player 2 ###
-	
-	dificuldade_1()
-
-	##########################
+	CPU_PLAYER() # player 2 executa algum movimento de acordo com o nível atual
 	
 	# Verifica se o player pressionou alguma tecla
 	li t1,0xFF200000		# carrega o endereco de controle do KDMMIO
