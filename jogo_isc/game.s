@@ -13,13 +13,21 @@ rd: .string "RD"
 th: .string "TH"
 dan: .string "DAN"
 oneplayer: .string "1 PLAYER"
+gameover: .string "GAME OVER"
+score: .string "SCORE:"
+level: .string "LEVEL:"
+victormanuel: .string "VICTOR MANUEL"
+pedrohenrique: .string "PEDRO HENRIQUE"
+marceloamorim: .string "MARCELO AMORIM"
+turma: .string "ISC TURMA A"
+lamar: .string "PROF. MARCUS VINICIUS LAMAR"
 
 ### JOGO ###
 .text
 	
 	# comente para ver o menu inicial
-	#la t0,GAME
-	#jr t0
+	la t0,GAME_OVER
+	jr t0
 	
 	li s11,0		# frame 0
 	CHANGE_BACKGROUND(home_screen)
@@ -32,7 +40,7 @@ oneplayer: .string "1 PLAYER"
 MUSIC_LOOP:
 	### Carrega info para a musica ###
 	li s7,0			# zera o contador de notas
-	la s0,TAMANHO		# define o endere�o do n�mero de notas
+	la s0,TAMANHO	# define o endere�o do n�mero de notas
 	lw s1,0(s0)		# le o numero de notas
 	la s0,NOTAS		# define o endere�o das notas
 	li a3,127		# define o volume
@@ -411,7 +419,58 @@ RESET:	# RESETA VALORES (ambos os frames)
 	la t0,GAMELOOP
 	jr t0
 
-EXIT:	li a7,10	# syscall de exit
+GAME_OVER:	# tela final de game over
+	li s11,0	# define o frame 0
+	CHANGE_BACKGROUND(cic_unb)
+
+	li a0,180	# x_player2
+	PRINT_SPRITE(p2_finish3, 50)
+	li a0,220	# x_player1
+	PRINT_SPRITE(p1_finish3, 50)
+
+	li a7,304	# ecall customizada com a fonte do jogo (printStringGame)
+	li a4,0		# define o frame 0
+	li a1,5		# x
+	li a2,90	# y
+	li a3,0xC7CA	# cor azul
+	la a0,gameover	# endereço da string "GAME OVER"
+	ecall
+
+	li a7,304	# ecall customizada com a fonte do jogo (printStringGame)
+	li a4,0		# define o frame 0
+	li a1,5		# x
+	li a2,105	# y
+	li a3,0xC7CA	# cor azul
+	la a0,level	# endereço da string "LEVEL:"
+	ecall
+
+	li s10,13
+	li a7,301	# ecall customizada com a fonte do jogo (printIntGame)
+	li a4,0		# define o frame 0
+	li a1,53	# x
+	li a2,105	# y
+	li a3,0xC7CA	# cor azul
+	mv a0,s10	# nivel atual
+	ecall
+
+	li a7,304	# ecall customizada com a fonte do jogo (printStringGame)
+	li a4,0		# define o frame 0
+	li a1,5		# x
+	li a2,120	# y
+	li a3,0xC7CA	# cor azul
+	la a0,score	# endereço da string "SCORE:"
+	ecall
+
+	li a7,301	# ecall customizada com a fonte do jogo (printIntGame)
+	li a4,0		# define o frame 0
+	li a1,53	# x
+	li a2,120	# y
+	li a3,0xC7CA	# cor azul
+	mv a0,s4	# score
+	ecall
+
+EXIT:	
+	li a7,10	# syscall de exit
 	ecall
 
 .include "./SYSTEMv21_MOD.s"
