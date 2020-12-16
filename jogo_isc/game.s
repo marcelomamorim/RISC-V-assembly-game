@@ -3,6 +3,7 @@
 .include "./animations_player1.s"
 .include "./animations_player2.s"
 .include "./musics/musicaprincipal.s"
+.include "./enemy.s"
 .data
 .include "./sprites.s"
 
@@ -172,6 +173,12 @@ GAMELOOP:
 	sw s11,0(t0)		# troca de frame
 	
 	xori s11,s11,0x0001	# inverte o frame atual
+	
+	### Lógica do Player 2 ###
+	
+	dificuldade_1()
+
+	##########################
 	
 	# Verifica se o player pressionou alguma tecla
 	li t1,0xFF200000		# carrega o endereco de controle do KDMMIO
