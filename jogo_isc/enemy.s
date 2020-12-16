@@ -41,12 +41,12 @@ END:
 .macro DIFFICULTY_1()
 	VER_DIST()
 	li t0,35
-	blt a0,t0,T_ATQ
+	blt a0,t0,ATQ
 
 	la t0,P2_ANDA
 	jr t0
 	
-T_ATQ:	PUNCH_P2()
+ATQ:	PUNCH_P2()
 	la t0,P2_FIM
 	jr t0
 
