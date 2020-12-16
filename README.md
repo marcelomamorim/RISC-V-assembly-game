@@ -1,6 +1,8 @@
 ## Jogo - The Way of the Exploding Fist
 
-Jogo desenvolvido em grupo para a matéria de Introdução aos Sistemas Computacionais da Universidade de Brasília
+Jogo desenvolvido em grupo para a matéria de Introdução aos Sistemas Computacionais da Universidade de Brasília (UnB). 
+
+![](/readme-imgs/jogo-assembly.png)
 
 Funcionalidades do Player 1:
 
@@ -44,40 +46,66 @@ Movimentos do Player 2:
 
 (3) Clicar na opção 'Assemble the current file and clear breakpoints'.
 
+![](/readme-imgs/assemble-file.png)
+
 (4) Para executar o jogo no Rars é necessário ir à aba (3.1) 'Tools' > Bitmap Display e depois (3.2) 'Tools'> Keyboard and Display MMIO Simulator. Essas ferramentas devem ser conectadas ao programa.
 
 (5) Por fim, clicar na opção 'Run the current program'.
 
+![](/readme-imgs/start.png)
+
+(6) O programa selecionado deve ser o 'game.s'.
+
 
 ## Dinâmica do jogo
 
+
+
 O jogo começará assim.
+
+
 ![](/readme-imgs/menu.png)
 
 Após alguma tecla pressionada, irá para a seguinte tela.
+
+
 ![](/readme-imgs/inicio.png)
 
 Os players executam a macro greet(), fazendo os cumprimentos.
+
+
 ![](/readme-imgs/greet.png)
 
 As funcionalidades estão documentadas abaixo:
 
 (c) chute
+
+
 ![](/readme-imgs/chute.png)
 
 (v) golpe
+
+
 ![](/readme-imgs/golpe-c.png)
 
 (w) pulo central
+
+
 ![](/readme-imgs/pulo-cima.png)
 
 (q) pulo para a direita
+
+
 ![](/readme-imgs/pulo-direita.png)
 
 (e) pulo para a esquerda
+
+
 ![](/readme-imgs/pulo-esq.png)
 
 (z) rolamento
+
+
 ![](/readme-imgs/rolamento.png)
 
 ## Detalhamento das funcionalidades
