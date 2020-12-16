@@ -1,0 +1,154 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  Versão final do IEEExplore
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\documentclass[10pt, conference, compsocconf]{IEEEtran}
+\documentclass[a4paper]{sbgames}               
+
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm,siunitx}
+\usepackage[brazil,american]{babel}
+\usepackage[utf8]{inputenc}
+
+%% use this for zero \parindent and non-zero \parskip, intelligently.
+\usepackage{parskip}
+
+%% the 'caption' package provides a nicer-looking replacement
+%\usepackage[labelfont=bf,textfont=it]{caption}
+
+\usepackage{url}
+
+\begin{document}
+
+%% Paper title.
+\title{The Way of the Exploding Fist}
+
+
+% \author{\IEEEauthorblockN{Autor1, Autor2, and Autor3}
+% \IEEEauthorblockA{Dept. of Computer Science\\
+% University of Brasilia\\ Brasilia, Brazil\\
+% Email: \{autor1, autor2\}@gmail.com autor3@hotmail.com}
+% }
+
+ \author{ Pedro Henrique dos Santos 
+         \hspace{28pt} Vitor Manuel \\
+         \hspace{28pt} Marcelo Amorim \\
+         \vspace{0pt} \\
+         {University of Brasília, Dept. of Computer Science, Brazil} }
+        
+ \contactinfo{autor1@gmail.com \\ marceloamorim.webdev@gmail.com \\ autor3@email.com }
+
+
+
+%\teaser{
+%  \includegraphics[width=\linewidth]{sample.pdf}
+%  (a)\hspace{150pt} (b) \hspace{150pt}   (c)
+%  \caption{(a) Guitar Hero III screen; (b) DE2-35 Kit on top of PlayStation 2; (c) Grybot}
+%  \label{fig:01}
+%}
+
+
+% make the title area
+\maketitle
+
+% Abstract section.
+\begin{abstract}
+Esse projeto teve como objetivo desenvolver um jogo a partir dos estudos na matéria de Introdução aos Sistemas Computacionais. O conjunto de instruções (ISA - Instruction Set Architecture) utilizados no desenvolvimento é o RISC-V. Segundo Pereira (2017), "a iniciativa RISC-V foi criada com o objetivo de desenvolver um processador de alto desempenho e código aberto, que possa ser utilizado no desenvolvimento de aplicações e produtos de uso geral. RISC-V é uma ISA (Instruction Set Architecture ou arquitetura de conjunto de instruções) desenvolvida originalmente na Universidade da Califórnia". Neste artigo ficará descrito toda a metodologia de desenvolvimento do jogo, desde a definição das macros, loops que fazem a dinâmica do jogo, renderização das sprites etc. Assim, seguiremos as seguintes etapas neste artigo: introdução, metodologia, resultados, discussão e referências.
+
+\end{abstract}
+
+%% Keywords that describe your work.
+\keywords{RISC-V, Assembly, Jogos,  The Way of the Exploding Fist}
+% \begin{IEEEkeywords}
+% Jogos; Processador MIPS; FPGA;
+% \end{IEEEkeywords}
+
+
+\section{Introdução}
+\label{sec:introducao}
+
+Jogos digitais tem sido amplamente usados para fins de aprendizagem.
+
+Este trabalho apresenta um exemplo prático de como o desenvolvimento de jogos pode ser interessante para aprendizagem de conceitos fundamentais de computação. No desenvolvimento do jogo foi possível estudar conceitos importantes de programação e os fundamentos desses conceitos. 
+
+
+\begin{figure}[htb]
+  \begin{center}
+   \includegraphics[height=0.8\linewidth]{./Figures/Fig1b.png}
+  \end{center}
+  \caption{O que é a figura}
+  \label{fig:01}
+\end{figure}
+
+A Figura \ref{fig:01} mostra o jogo The Way of the Exploding Fist  ~\cite{Alt}.
+
+Sobre o jogo
+
+Na seção \ref{sec:Metodologia} será apresentada a metodologia utilizada. A seção \ref{sec:Resultados} apresenta os resultados obtidos. A seção \ref{sec:Conclusao} conclui este trabalho.
+
+\section{Metodologia}
+\label{sec:Metodologia}
+
+[Apresentar aqui como o projeto foi desenvolvido e quais as ferramentas usadas] 
+
+1) A divisão de arquivos no desenvolvimento ficou da seguinte maneira:
+
+- game.s
+	0 arquivo game.s é onde está o centro da aplicação. Nele foi colocado as dependências explicadas a seguir (animations-player1.s, animations-player2.s, GAME-MACRO.s, sprites.s). O programa inicia com o loop do menu e, posteriormente, o loop do jogo (GAMELOOP). No GAMELOOP fica definido todas as teclas de controle do player 1.
+	
+- animations-player1.s + animations-player2.s
+	Aqui ficaram todas as macros ligadas aos movimentos do Player 1 e do Player 2 em seus respectivos arquivos.
+	
+- GAME-MACROS.s
+	As game macros foram macros relacionadas ao jogo de forma geral e ficaram disponíveis para uso não só relacionada a um player.
+
+- sprites.s
+	Nesse arquivo ficaram todos os 'includes' relacionados às imagens em formato '.data'.
+
+2) Utilizamos o github para versionar o código e otimizar o trabalho em grupo:
+
+- Repositório do trabalho:
+ 	 https://github.com/MarceloAmorim25/RISC-V-Assembly-game
+
+\subsection{Arquitetura RISC-V}{
+\label{sec:MIPS}
+Exemplo de subseção. A arquitetura RISC-V \cite{patterson2005organizaccao} surgiu como uma forma de alternativa à dependência de padrões definidos apenas por empresas que tivessem com maior força no mercado de desenvolvimento de processadores. Um conjunto de padrões de instruções aberto veio como uma alternativa de se manter esses padrões de forma independente. Segundo o The RISC-V Instruction Set ManualVolume I: Base User-Level ISA Version 1.0, um dos objetivos da criação desse conjunto de instruções é "Provide  a realistic but openISA  that  captures  important  details  of  commercial  general-purpose ISA designs and that is suitable for direct hardware implementation.". Esse documento de marco inicial é aberto e pode ser consultado em https://www2.eecs.berkeley.edu/Pubs/TechRpts/2011/EECS-2011-62.pdf.
+ 
+}
+
+
+\subsection{Simulador/Montador RARS}{
+\label{sec:Rars}
+Exemplo de subseção. O Rars \textit{RISC-V Assembler, Simulator, and Runtime} \cite{Mars1}, segundo o seu repositório no github: "RARS, the RISC-V Assembler, Simulator, and Runtime, will assemble and simulate the execution of RISC-V assembly language programs. Its primary goal is to be an effective development environment for people getting started with RISC-V.". Esse repositório pode ser acessado no link - https://github.com/TheThirdOne/rars.
+
+}
+
+
+\section{Resultados Obtidos}
+\label{sec:Resultados}
+Apresentar aqui os resultados obtidos, telas e link para vídeos e comentários.
+
+ 
+
+\section{Conclusão}
+\label{sec:Conclusao}
+Este trabalho apresentou...
+
+
+
+Referências: 
+
+https://www.embarcados.com.br/fe310g-microcontrolador-open-source-estrutura-basica-risc-v/
+
+
+
+%{\bf Acknowledgments}
+%[Blind Review]
+
+%\newcommand{\BIBdecl}{\setlength{\itemsep}{-0.5 em}}
+%\bibliographystyle{IEEEtran}
+\bibliographystyle{sbgames}
+\bibliography{bibliography}
+
+\end{document}
