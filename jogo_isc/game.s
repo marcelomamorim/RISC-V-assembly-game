@@ -175,6 +175,8 @@ GAMELOOP:
 	
 	xori s11,s11,0x0001	# inverte o frame atual
 	
+	YIN_YANG()
+	
 	# Verifica se o player pressionou alguma tecla
 	li t1,0xFF200000		# carrega o endereco de controle do KDMMIO
 	lw t0,0(t1)			# le bit de Controle Teclado
@@ -209,10 +211,16 @@ GAMELOOP:
 	beq t2,t0,T_P1_JUMP_CENTER 	# pulo central
 	
 	li t0,110		  	# n
-	beq t2,t0,CHEAT_NEXT_LEVEL 	# pr�xima fase
+	beq t2,t0,CHEAT_NEXT_LEVEL 	# pr�oxima fase
 	
 	li t0,98		  	# b
 	beq t2,t0,CHEAT_PREV_LEVEL 	# fase anterior
+	
+	li t0,107		  	# k
+	beq t2,t0,CHEAT_ADD_P1	 	# adiciona yinyang ao player 1
+	
+	li t0,108		  	# l
+	beq t2,t0,CHEAT_ADD_P2	 	# adiciona yinyang ao player 2
 	
 	# tecla nao identificada
 	
@@ -248,10 +256,19 @@ CHEAT_NEXT_LEVEL:
 	addi s10,s10,1	# level++
 	la t0,LOAD_LEVEL
 	jr t0
-	
 CHEAT_PREV_LEVEL:
 	addi s10,s10,-1	# level--
 	la t0,LOAD_LEVEL
+	jr t0
+CHEAT_ADD_P1:
+	addi s3,s3,1	# yinyang_p1++
+	
+	la t0,CONT_GAMELOOP
+	jr t0
+CHEAT_ADD_P2:
+	addi s7,s7,1	# yinyang_p2++
+	
+	la t0,CONT_GAMELOOP
 	jr t0
 	
 P1_ESQ:	WALK_P1_ESQ()
@@ -305,8 +322,8 @@ CONT_GAMELOOP:
 	
 	ADD_FRAME_COUNTDOWN()	# contador de frames++
 	VER_COUNTDOWN()		# atualiza tempo
-	beqz s9,EMPATE	# tempo acabou
-
+	beqz s9,EMPATE		# tempo acabou
+	
 	la t0,GAMELOOP
 	jr t0
 
@@ -318,8 +335,8 @@ EMPATE: DRAW()
 	la t0,LOAD_LEVEL
 	jr t0
 
-RESET_LEVEL: # reseta o n�vel por completo
-	li s3,0	# p2_yinyang
+RESET_LEVEL: # reseta o nivel por completo
+	li s3,0	# p1_yinyang
 	li s7,0	# p2_yinyang
 
 LOAD_LEVEL: # carrega o nivel (s10)
@@ -427,7 +444,7 @@ GAME_OVER:	# tela final de game over
 	li a1,5		# x
 	li a2,90	# y
 	li a3,0xC7CA	# cor azul
-	la a0,gameover	# endereço da string "GAME OVER"
+	la a0,gameover	# enderecoo da string "GAME OVER"
 	ecall
 
 	li a7,304	# ecall customizada com a fonte do jogo (printStringGame)
@@ -435,7 +452,7 @@ GAME_OVER:	# tela final de game over
 	li a1,5		# x
 	li a2,105	# y
 	li a3,0xC7CA	# cor azul
-	la a0,level	# endereço da string "LEVEL:"
+	la a0,level	# enderecoo da string "LEVEL:"
 	ecall
 
 	li a7,301	# ecall customizada com a fonte do jogo (printIntGame)
@@ -451,7 +468,7 @@ GAME_OVER:	# tela final de game over
 	li a1,5		# x
 	li a2,120	# y
 	li a3,0xC7CA	# cor azul
-	la a0,score	# endereço da string "SCORE:"
+	la a0,score	# enderecoo da string "SCORE:"
 	ecall
 
 	li a7,301	# ecall customizada com a fonte do jogo (printIntGame)
