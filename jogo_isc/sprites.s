@@ -6,6 +6,7 @@
 .include "./images/map4.data"
 .include "./images/yin.data"
 .include "./images/yinyang.data"
+.include "./images/cic_unb.data"
 
 ### PLAYER 1 ###
 .include "./images/p1_greet1.data"
