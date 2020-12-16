@@ -32,9 +32,9 @@ oneplayer: .string "1 PLAYER"
 MUSIC_LOOP:
 	### Carrega info para a musica ###
 	li s7,0			# zera o contador de notas
-	la s0,TAMANHO		# define o endereço do número de notas
+	la s0,TAMANHO		# define o endereï¿½o do nï¿½mero de notas
 	lw s1,0(s0)		# le o numero de notas
-	la s0,NOTAS		# define o endereço das notas
+	la s0,NOTAS		# define o endereï¿½o das notas
 	li a3,127		# define o volume
 	###
 MENU_LOOP: 	
@@ -45,10 +45,10 @@ MENU_LOOP:
 	li a7,31		# define a chamada de syscall
 	li a2,2			# define o instrumento
 	ecall			# toca a nota
-	mv a0,a1		# passa a duração da nota para a pausa
+	mv a0,a1		# passa a duraï¿½ï¿½o da nota para a pausa
 	li a7,32		# define a chamada de syscal 
 	ecall			# realiza uma pausa de a0 ms
-	addi s0,s0,8		# incrementa para o endereço da próxima nota
+	addi s0,s0,8		# incrementa para o endereï¿½o da prï¿½xima nota
 	addi s7,s7,1		# incrementa o contador de notas
 	#################
 	
@@ -151,7 +151,7 @@ FINISH_GAME_P1: # termina a fase com o player 1 como vencedor
 	bge s3,t0,T_NEXT_LEVEL	# se p1_yinyang >= 4, proxima fase
 	j CONT_FINISH_GAME_P1
 	
-T_NEXT_LEVEL: # intermediario pois o endereço eh muito longo
+T_NEXT_LEVEL: # intermediario pois o endereï¿½o eh muito longo
 	la t0,NEXT_LEVEL
 	jr t0
 	
@@ -159,7 +159,7 @@ CONT_FINISH_GAME_P1:
 	la t0,GAME
 	jr t0
 
-NEXT_LEVEL: # carrega a próxima fase
+NEXT_LEVEL: # carrega a prï¿½xima fase
 	addi s10,s10,1	# proximo level (max: 10TH DAN)
 	
 	la t0,RESET_LEVEL
@@ -207,7 +207,7 @@ GAMELOOP:
 	beq t2,t0,T_P1_JUMP_CENTER 	# pulo central
 	
 	li t0,110		  	# n
-	beq t2,t0,CHEAT_NEXT_LEVEL 	# próxima fase
+	beq t2,t0,CHEAT_NEXT_LEVEL 	# prï¿½xima fase
 	
 	li t0,98		  	# b
 	beq t2,t0,CHEAT_PREV_LEVEL 	# fase anterior
@@ -316,7 +316,7 @@ EMPATE: DRAW()
 	la t0,LOAD_LEVEL
 	jr t0
 
-RESET_LEVEL: # reseta o nível por completo
+RESET_LEVEL: # reseta o nï¿½vel por completo
 	li s3,0	# p2_yinyang
 	li s7,0	# p2_yinyang
 
