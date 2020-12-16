@@ -10,9 +10,22 @@
 \usepackage{amsmath,amssymb,amsthm,siunitx}
 \usepackage[brazil,american]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage{multicol}
+\setlength{\columnsep}{2cm}
+\usepackage{geometry}
+\geometry{
+	a4paper,
+	left=25mm,
+	top=20mm,
+	bottom=25mm,
+	right=20mm
+}
 
 %% use this for zero \parindent and non-zero \parskip, intelligently.
 \usepackage{parskip}
+\setlength{\parindent}{10em}
+\setlength{\parskip}{8em}
+\renewcommand{\baselinestretch}{2}
 
 %% the 'caption' package provides a nicer-looking replacement
 %\usepackage[labelfont=bf,textfont=it]{caption}
@@ -32,12 +45,12 @@
 % }
 
  \author{ Pedro Henrique dos Santos 
-         \hspace{28pt} Vitor Manuel \\
-         \hspace{28pt} Marcelo Amorim \\
+         \hspace{28pt} Victor Manuel Brito Santos \\
+         \hspace{28pt} Marcelo Medeiros Amorim \\
          \vspace{0pt} \\
          {University of Brasília, Dept. of Computer Science, Brazil} }
         
- \contactinfo{autor1@gmail.com \\ marceloamorim.webdev@gmail.com \\ autor3@email.com }
+ \contactinfo{autor1@gmail.com \\ marceloamorim.webdev@gmail.com \\ victor.manuel@aluno.unb.br }
 
 
 
@@ -51,6 +64,9 @@
 
 % make the title area
 \maketitle
+
+\setlength{\parindent}{4em}
+\setlength{\parskip}{1em}
 
 % Abstract section.
 \begin{abstract}
@@ -68,9 +84,8 @@ Esse projeto teve como objetivo desenvolver um jogo a partir dos estudos na mat�
 \section{Introdução}
 \label{sec:introducao}
 
-Jogos digitais tem sido amplamente usados para fins de aprendizagem.
 
-Este trabalho apresenta um exemplo prático de como o desenvolvimento de jogos pode ser interessante para aprendizagem de conceitos fundamentais de computação. No desenvolvimento do jogo foi possível estudar conceitos importantes de programação e os fundamentos desses conceitos. 
+Jogos digitais tem sido amplamente usados para fins de aprendizagem. Por meio das funcionalidades de um jogo é possível desenvolver diversos conceitos de programação. Durante o desenvolvimento do jogo, ficou muito marcado, por exemplo, a importância dos loops para manter a dinâmica do jogo. Também foi muito rico trabalhar com as imagens e aprender a printar diferentes sprites, gerando sensação de movimento. Tendo como referência o The RISC-V Instruction Set Manual, um dos objetivos da criação dessa arquitetura foi: "Be simple to subset for educational purposes and to reduce complexity of bringing up newimplementations". Desse modo, o desenvolvimento do jogo no contexto de linguagem RISC-V assembly, possibilitou diversos ganhos de aprendizagem no processo.
 
 
 \begin{figure}[htb]
@@ -90,31 +105,51 @@ Na seção \ref{sec:Metodologia} será apresentada a metodologia utilizada. A se
 \section{Metodologia}
 \label{sec:Metodologia}
 
-[Apresentar aqui como o projeto foi desenvolvido e quais as ferramentas usadas] 
+\setlength{\parindent}{4em}
+\setlength{\parskip}{1em}
+
 
 1) A divisão de arquivos no desenvolvimento ficou da seguinte maneira:
 
-- game.s
-	0 arquivo game.s é onde está o centro da aplicação. Nele foi colocado as dependências explicadas a seguir (animations-player1.s, animations-player2.s, GAME-MACRO.s, sprites.s). O programa inicia com o loop do menu e, posteriormente, o loop do jogo (GAMELOOP). No GAMELOOP fica definido todas as teclas de controle do player 1.
+1.1) game.s: 0 arquivo game.s é onde está o centro da aplicação. Nele foi colocado as dependências explicadas a seguir (animations-player1.s, animations-player2.s, GAME-MACRO.s, sprites.s). O programa inicia com o loop do menu e, posteriormente, o loop do jogo (GAMELOOP). No GAMELOOP fica definido todas as teclas de controle do player 1.
 	
-- animations-player1.s + animations-player2.s
-	Aqui ficaram todas as macros ligadas aos movimentos do Player 1 e do Player 2 em seus respectivos arquivos.
+1.2) animations-player1.s + animations-player2.s: Aqui ficaram todas as macros ligadas aos movimentos do Player 1 e do Player 2 em seus respectivos arquivos.
 	
-- GAME-MACROS.s
-	As game macros foram macros relacionadas ao jogo de forma geral e ficaram disponíveis para uso não só relacionada a um player.
+1.3) GAME-MACROS.s: As game macros foram macros relacionadas ao jogo de forma geral e ficaram disponíveis para uso não só relacionada a um player.
 
-- sprites.s
-	Nesse arquivo ficaram todos os 'includes' relacionados às imagens em formato '.data'.
+1.4) sprites.s: Nesse arquivo ficaram todos os 'includes' relacionados às imagens em formato '.data'.
+
 
 2) Utilizamos o github para versionar o código e otimizar o trabalho em grupo:
 
-- Repositório do trabalho:
- 	 https://github.com/MarceloAmorim25/RISC-V-Assembly-game
+2.1) Não seguimos um padrão de versionamento, como Gitflow. Como se trata de um projeto menor, alguns commits foram diretos na branch main, tendo em vista não ter muita necessidade de ter adotado branchs develop etc. Adotamos branchs com identificadores tipo features (feat/) e fix (fix/) apenas como forma de organização do projeto. Todas as funcionalidades desenvolvidas já tiveram o merge request aceitos e estão unificadas com a branch main.
 
+2.2) Repositório do trabalho: https://github.com/MarceloAmorim25/RISC-V-Assembly-game
+ 
+ 	 
+3) Utilizamos o RARS como ambiente de desenvolvimento integrado (IDE) e o Visual Studio Code para edição do README.md
+ 
+4) Para a renderização das imagens, foi necessária a ferramenta Bitmap Display, presente no RARS.
+ 
+5) Para interagir com o teclado, Keyboard and Display MMIO Simulator.
+ 
+6) As principais fontes de pesquisa foram as aulas ministradas na matéria de Introdução aos Sistemas Computacionais e os materiais de apoio.
+
+7) Todas as funcionalidades foram comentadas para fins de documentação dos programas.
+
+
+\textbf{}
 \subsection{Arquitetura RISC-V}{
 \label{sec:MIPS}
+
 Exemplo de subseção. A arquitetura RISC-V \cite{patterson2005organizaccao} surgiu como uma forma de alternativa à dependência de padrões definidos apenas por empresas que tivessem com maior força no mercado de desenvolvimento de processadores. Um conjunto de padrões de instruções aberto veio como uma alternativa de se manter esses padrões de forma independente. Segundo o The RISC-V Instruction Set ManualVolume I: Base User-Level ISA Version 1.0, um dos objetivos da criação desse conjunto de instruções é "Provide  a realistic but openISA  that  captures  important  details  of  commercial  general-purpose ISA designs and that is suitable for direct hardware implementation.". Esse documento de marco inicial é aberto e pode ser consultado em https://www2.eecs.berkeley.edu/Pubs/TechRpts/2011/EECS-2011-62.pdf.
+
+Um pouco mais sobre a história do RISC-V pode ser encontrada aqui https://riscv.org/about/history/.
+
+Segundo o artigo presente em https://live-risc-v.pantheonsite.io/wp-content/uploads/2016/02/EECS-2016-6.pdf, "Since the instruction set architecture (ISA) is unrestricted,organizations can share implementations as well as open source compilers and operating systems.Designed for use in custom systems on a chip, RISC-V consists of a base set of instructions calledRV32I along with optional extensions for multiply and divide (RV32M), atomic operations(RV32A), single-precision floating point (RV32F), and double-precision floating point (RV32D).". Essa passagem reforça a tese inicial de que o RISC-V surgiu como forma de existir uma arquitetura comum no mercado, não dependendo de empresa A ou B somente.
  
+Fica claro que o RISC-V é uma interface, e não uma implementação específica, como dito em https://www2.eecs.berkeley.edu/Pubs/TechRpts/2014/EECS-2014-146.pdf: "Note that an ISA is really an interface specification, and not an implementation. There are three types of implementations of an ISA:1.Private closed source, analogous to Apple iOS.2.Licensed open source, like Wind River VxWorks.3.Free, open source that users can change and share, like Linux".
+
 }
 
 
@@ -127,13 +162,28 @@ Exemplo de subseção. O Rars \textit{RISC-V Assembler, Simulator, and Runtime} 
 
 \section{Resultados Obtidos}
 \label{sec:Resultados}
+
 Apresentar aqui os resultados obtidos, telas e link para vídeos e comentários.
 
+Os resultados obtidos foram a seguinte lista de funcionalidades:
+
+- Andar para a direita (d)
+- Andar para a esquerda (a)
+- Chute (c)
+- Pulo central (w)
+- Pulo esquerda (q)
+- Pulo direita (e)
+- Rolamento (z)
+- Próximo nível (n)
+- Nível anterior (b)
+
+ 
+No repositório do projeto, as funcionalidades possuem maior detalhamento: https://github.com/MarceloAmorim25/RISC-V-assembly-game
  
 
 \section{Conclusão}
 \label{sec:Conclusao}
-Este trabalho apresentou...
+Este trabalho apresentou um jogo desenvolvido em linguagem RISC-V assembly. Utilizamos esse conjunto de instruções Open Source estudado na matéria de Introdução aos Sistemas Computacionais - UnB para desenvolver o jogo.
 
 
 
