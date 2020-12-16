@@ -16,18 +16,12 @@ oneplayer: .string "1 PLAYER"
 gameover: .string "GAME OVER"
 score: .string "SCORE:"
 level: .string "LEVEL:"
-victormanuel: .string "VICTOR MANUEL"
-pedrohenrique: .string "PEDRO HENRIQUE"
-marceloamorim: .string "MARCELO AMORIM"
-turma: .string "ISC TURMA A"
-lamar: .string "PROF. MARCUS VINICIUS LAMAR"
 
 ### JOGO ###
 .text
-	
 	# comente para ver o menu inicial
-	la t0,GAME_OVER
-	jr t0
+	#la t0,GAME_OVER
+	#jr t0
 	
 	li s11,0		# frame 0
 	CHANGE_BACKGROUND(home_screen)
@@ -444,7 +438,6 @@ GAME_OVER:	# tela final de game over
 	la a0,level	# endereço da string "LEVEL:"
 	ecall
 
-	li s10,13
 	li a7,301	# ecall customizada com a fonte do jogo (printIntGame)
 	li a4,0		# define o frame 0
 	li a1,53	# x
