@@ -135,8 +135,6 @@ GAME:
 	li s10,0	# fase 0
 	li s11,0	# frame 0
 
-	###
-
 	la t0,LOAD_LEVEL
 	jr t0
 	
@@ -159,7 +157,7 @@ T_NEXT_LEVEL: # intermediario pois o endereï¿½o eh muito longo
 	jr t0
 	
 CONT_FINISH_GAME_P1:
-	la t0,GAME
+	la t0,LOAD_LEVEL
 	jr t0
 
 NEXT_LEVEL: # carrega a prï¿½xima fase
@@ -178,6 +176,12 @@ GAMELOOP:
 	
 	CPU_PLAYER()
 	YIN_YANG()
+
+	j PULA
+T2_GAME_OVER:	
+	la t0, GAME_OVER
+	jr t0
+PULA:	
 	
 	# Verifica se o player pressionou alguma tecla
 	li t1,0xFF200000		# carrega o endereco de controle do KDMMIO
@@ -213,7 +217,7 @@ GAMELOOP:
 	beq t2,t0,T_P1_JUMP_CENTER 	# pulo central
 	
 	li t0,110		  	# n
-	beq t2,t0,CHEAT_NEXT_LEVEL 	# prïoxima fase
+	beq t2,t0,CHEAT_NEXT_LEVEL 	# prï¿½oxima fase
 	
 	li t0,98		  	# b
 	beq t2,t0,CHEAT_PREV_LEVEL 	# fase anterior
@@ -330,6 +334,8 @@ CONT_GAMELOOP:
 	jr t0
 
 FINISH_GAMELOOP:	# faz algo
+	
+
 	la t0,GAMELOOP
 	jr t0
 
@@ -434,6 +440,10 @@ RESET:	# RESETA VALORES (ambos os frames)
 
 GAME_OVER:	# tela final de game over
 	li s11,0	# define o frame 0
+	li t0,0xFF200604    # Escolhe o frame 0 ou 1
+	sw s11,0(t0)        # Troca de frame
+	
+	li s11,0	# define o frame 0
 	CHANGE_BACKGROUND(cic_unb)
 
 	li a0,180	# x_player2
@@ -480,7 +490,6 @@ GAME_OVER:	# tela final de game over
 	li a3,0xC7CA	# cor azul
 	mv a0,s4	# score
 	ecall
-
 EXIT:	
 	li a7,10	# syscall de exit
 	ecall
