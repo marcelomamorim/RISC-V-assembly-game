@@ -3,7 +3,6 @@
 .include "./animations_player1.s"
 .include "./animations_player2.s"
 .include "./musics/musicaprincipal.s"
-.include "./enemy.s"
 .data
 .include "./sprites.s"
 
@@ -14,12 +13,14 @@ rd: .string "RD"
 th: .string "TH"
 dan: .string "DAN"
 oneplayer: .string "1 PLAYER"
+gameover: .string "GAME OVER"
+score: .string "SCORE:"
+level: .string "LEVEL:"
 
 ### JOGO ###
 .text
-	
 	# comente para ver o menu inicial
-	#la t0,GAME
+	#la t0,GAME_OVER
 	#jr t0
 	
 	li s11,0		# frame 0
@@ -33,9 +34,9 @@ oneplayer: .string "1 PLAYER"
 MUSIC_LOOP:
 	### Carrega info para a musica ###
 	li s7,0			# zera o contador de notas
-	la s0,TAMANHO		# define o endereço do número de notas
+	la s0,TAMANHO	# define o endereï¿½o do nï¿½mero de notas
 	lw s1,0(s0)		# le o numero de notas
-	la s0,NOTAS		# define o endereço das notas
+	la s0,NOTAS		# define o endereï¿½o das notas
 	li a3,127		# define o volume
 	###
 MENU_LOOP: 	
@@ -46,10 +47,10 @@ MENU_LOOP:
 	li a7,31		# define a chamada de syscall
 	li a2,2			# define o instrumento
 	ecall			# toca a nota
-	mv a0,a1		# passa a duração da nota para a pausa
+	mv a0,a1		# passa a duraï¿½ï¿½o da nota para a pausa
 	li a7,32		# define a chamada de syscal 
 	ecall			# realiza uma pausa de a0 ms
-	addi s0,s0,8		# incrementa para o endereço da próxima nota
+	addi s0,s0,8		# incrementa para o endereï¿½o da prï¿½xima nota
 	addi s7,s7,1		# incrementa o contador de notas
 	#################
 	
@@ -152,7 +153,7 @@ FINISH_GAME_P1: # termina a fase com o player 1 como vencedor
 	bge s3,t0,T_NEXT_LEVEL	# se p1_yinyang >= 4, proxima fase
 	j CONT_FINISH_GAME_P1
 	
-T_NEXT_LEVEL: # intermediario pois o endereço eh muito longo
+T_NEXT_LEVEL: # intermediario pois o endereï¿½o eh muito longo
 	la t0,NEXT_LEVEL
 	jr t0
 	
@@ -160,7 +161,7 @@ CONT_FINISH_GAME_P1:
 	la t0,GAME
 	jr t0
 
-NEXT_LEVEL: # carrega a próxima fase
+NEXT_LEVEL: # carrega a prï¿½xima fase
 	addi s10,s10,1	# proximo level (max: 10TH DAN)
 	
 	la t0,RESET_LEVEL
@@ -174,8 +175,7 @@ GAMELOOP:
 	
 	xori s11,s11,0x0001	# inverte o frame atual
 	
-	CPU_PLAYER() # player 2 executa algum movimento de acordo com o nível atual
-	
+	CPU_PLAYER()
 	YIN_YANG()
 	
 	# Verifica se o player pressionou alguma tecla
@@ -212,10 +212,16 @@ GAMELOOP:
 	beq t2,t0,T_P1_JUMP_CENTER 	# pulo central
 	
 	li t0,110		  	# n
-	beq t2,t0,CHEAT_NEXT_LEVEL 	# próxima fase
+	beq t2,t0,CHEAT_NEXT_LEVEL 	# prïoxima fase
 	
 	li t0,98		  	# b
 	beq t2,t0,CHEAT_PREV_LEVEL 	# fase anterior
+	
+	li t0,107		  	# k
+	beq t2,t0,CHEAT_ADD_P1	 	# adiciona yinyang ao player 1
+	
+	li t0,108		  	# l
+	beq t2,t0,CHEAT_ADD_P2	 	# adiciona yinyang ao player 2
 	
 	# tecla nao identificada
 	
@@ -251,10 +257,19 @@ CHEAT_NEXT_LEVEL:
 	addi s10,s10,1	# level++
 	la t0,LOAD_LEVEL
 	jr t0
-	
 CHEAT_PREV_LEVEL:
 	addi s10,s10,-1	# level--
 	la t0,LOAD_LEVEL
+	jr t0
+CHEAT_ADD_P1:
+	addi s3,s3,1	# yinyang_p1++
+	
+	la t0,CONT_GAMELOOP
+	jr t0
+CHEAT_ADD_P2:
+	addi s7,s7,1	# yinyang_p2++
+	
+	la t0,CONT_GAMELOOP
 	jr t0
 	
 P1_ESQ:	WALK_P1_ESQ()
@@ -308,8 +323,8 @@ CONT_GAMELOOP:
 	
 	ADD_FRAME_COUNTDOWN()	# contador de frames++
 	VER_COUNTDOWN()		# atualiza tempo
-	beqz s9,EMPATE	# tempo acabou
-
+	beqz s9,EMPATE		# tempo acabou
+	
 	la t0,GAMELOOP
 	jr t0
 
@@ -321,8 +336,8 @@ EMPATE: DRAW()
 	la t0,LOAD_LEVEL
 	jr t0
 
-RESET_LEVEL: # reseta o nível por completo
-	li s3,0	# p2_yinyang
+RESET_LEVEL: # reseta o nivel por completo
+	li s3,0	# p1_yinyang
 	li s7,0	# p2_yinyang
 
 LOAD_LEVEL: # carrega o nivel (s10)
@@ -416,7 +431,57 @@ RESET:	# RESETA VALORES (ambos os frames)
 	la t0,GAMELOOP
 	jr t0
 
-EXIT:	li a7,10	# syscall de exit
+GAME_OVER:	# tela final de game over
+	li s11,0	# define o frame 0
+	CHANGE_BACKGROUND(cic_unb)
+
+	li a0,180	# x_player2
+	PRINT_SPRITE(p2_finish3, 50)
+	li a0,220	# x_player1
+	PRINT_SPRITE(p1_finish3, 50)
+
+	li a7,304	# ecall customizada com a fonte do jogo (printStringGame)
+	li a4,0		# define o frame 0
+	li a1,5		# x
+	li a2,90	# y
+	li a3,0xC7CA	# cor azul
+	la a0,gameover	# enderecoo da string "GAME OVER"
+	ecall
+
+	li a7,304	# ecall customizada com a fonte do jogo (printStringGame)
+	li a4,0		# define o frame 0
+	li a1,5		# x
+	li a2,105	# y
+	li a3,0xC7CA	# cor azul
+	la a0,level	# enderecoo da string "LEVEL:"
+	ecall
+
+	li a7,301	# ecall customizada com a fonte do jogo (printIntGame)
+	li a4,0		# define o frame 0
+	li a1,53	# x
+	li a2,105	# y
+	li a3,0xC7CA	# cor azul
+	mv a0,s10	# nivel atual
+	ecall
+
+	li a7,304	# ecall customizada com a fonte do jogo (printStringGame)
+	li a4,0		# define o frame 0
+	li a1,5		# x
+	li a2,120	# y
+	li a3,0xC7CA	# cor azul
+	la a0,score	# enderecoo da string "SCORE:"
+	ecall
+
+	li a7,301	# ecall customizada com a fonte do jogo (printIntGame)
+	li a4,0		# define o frame 0
+	li a1,53	# x
+	li a2,120	# y
+	li a3,0xC7CA	# cor azul
+	mv a0,s4	# score
+	ecall
+
+EXIT:	
+	li a7,10	# syscall de exit
 	ecall
 
 .include "./SYSTEMv21_MOD.s"
