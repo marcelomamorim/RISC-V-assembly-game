@@ -219,7 +219,7 @@ PULA:
 	beq t2,t0,T_P1_JUMP_CENTER 	# pulo central
 	
 	li t0,110		  	# n
-	beq t2,t0,CHEAT_NEXT_LEVEL 	# prïoxima fase
+	beq t2,t0,CHEAT_NEXT_LEVEL 	# prï¿½oxima fase
 	
 	li t0,98		  	# b
 	beq t2,t0,CHEAT_PREV_LEVEL 	# fase anterior
@@ -442,6 +442,10 @@ RESET:	# RESETA VALORES (ambos os frames)
 
 GAME_OVER:	# tela final de game over
 	li s11,0	# define o frame 0
+	li t0,0xFF200604    # Escolhe o frame 0 ou 1
+	sw s11,0(t0)        # Troca de frame
+	
+	li s11,0	# define o frame 0
 	CHANGE_BACKGROUND(cic_unb)
 
 	li a0,180	# x_player2
@@ -488,9 +492,6 @@ GAME_OVER:	# tela final de game over
 	li a3,0xC7CA	# cor azul
 	mv a0,s4	# score
 	ecall
-	
-	li t0,0xFF200604    # Escolhe o frame 0 ou 1
-	sw s11,0(t0)        # Troca de frame
 EXIT:	
 	li a7,10	# syscall de exit
 	ecall

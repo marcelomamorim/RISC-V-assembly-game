@@ -105,9 +105,9 @@ END:
 	mv a0,s1	# x do player 1
 	beqz s6,RIGHT
 
-LEFT:	PRINT_SPRITE(p1_1_defeat4, 30)
+LEFT:	PRINT_SPRITE(p1_0_defeat4, 30)
 	j END
-RIGHT:	PRINT_SPRITE(p1_0_defeat4, 30)
+RIGHT:	PRINT_SPRITE(p1_1_defeat4, 30)
 	j END
 END:
 .end_macro
@@ -593,8 +593,8 @@ RIGHT:
 	
 	xori s11,s11,0x001	# inverte o frame atual
 	CHANGE_BACKGROUND_PARTIAL()
-	PRINT_P2_DEFEATED()
-	PRINT_P1()
+	PRINT_P2()
+	PRINT_P1_DEFEATED()
 	li t0,0xFF200604	# Escolhe o frame 0 ou 1
 	sw s11,0(t0)		# Troca de frame
 
