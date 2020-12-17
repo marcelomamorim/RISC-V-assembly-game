@@ -3,6 +3,7 @@
 .include "./animations_player1.s"
 .include "./animations_player2.s"
 .include "./musics/musicaprincipal.s"
+.include "enemy.s"
 .data
 .include "./sprites.s"
 
@@ -177,6 +178,8 @@ GAMELOOP:
 	
 	YIN_YANG()
 	
+	CPU_PLAYER() # player 2 executa alguma ação
+
 	# Verifica se o player pressionou alguma tecla
 	li t1,0xFF200000		# carrega o endereco de controle do KDMMIO
 	lw t0,0(t1)			# le bit de Controle Teclado
@@ -211,7 +214,7 @@ GAMELOOP:
 	beq t2,t0,T_P1_JUMP_CENTER 	# pulo central
 	
 	li t0,110		  	# n
-	beq t2,t0,CHEAT_NEXT_LEVEL 	# pr�oxima fase
+	beq t2,t0,CHEAT_NEXT_LEVEL 	# pr�oxima fase
 	
 	li t0,98		  	# b
 	beq t2,t0,CHEAT_PREV_LEVEL 	# fase anterior
