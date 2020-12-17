@@ -174,10 +174,6 @@ GAMELOOP:
 	
 	xori s11,s11,0x0001	# inverte o frame atual
 	
-	mv a0,s0
-	li a7,1
-	ecall
-	
 	CPU_PLAYER() # player 2 executa algum movimento de acordo com o nível atual
 	
 	# Verifica se o player pressionou alguma tecla
