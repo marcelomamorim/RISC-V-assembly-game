@@ -47,9 +47,20 @@ END:
 	jr t0
 	
 ATQ:	PUNCH_P2()
-	la t0,P2_FIM
+	DEFEAT_P1()
+	FINISH_P2()
+	addi s7,s7,1
+	YIN_YANG()
+	
+	li t0,4
+	bgeu s7,t0,T1_GAME_OVER
+	
+	la t0,P2_RESET
 	jr t0
-
+T1_GAME_OVER:
+	la t0,T2_GAME_OVER
+	jr t0
+	
 	# se nao estiver perto o suficiente, anda na direcao do player
 P2_ANDA:blt s5,s1,T_P2_DIR
 	la t0,P2_ESQ
@@ -63,7 +74,11 @@ P2_ESQ:	WALK_P2_ESQ()
 	la t0,P2_FIM
 	jr, t0
 P2_DIR: WALK_P2_DIR()
-
+	la t0,P2_FIM
+	jr, t0
+P2_RESET:
+	la t0,RESET
+	jr, t0
 P2_FIM: 
 .end_macro
 
@@ -82,6 +97,7 @@ T_ATQ:
 	jr t0
 P2_SOCO:	
 	PUNCH_P2()
+
 	la t0,P2_FIM
 	jr t0
 P2_CHUTE:

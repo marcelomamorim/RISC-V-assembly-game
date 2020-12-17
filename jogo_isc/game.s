@@ -178,6 +178,12 @@ GAMELOOP:
 	
 	CPU_PLAYER()
 	YIN_YANG()
+
+	j PULA
+T2_GAME_OVER:	
+	la t0, GAME_OVER
+	jr t0
+PULA:	
 	
 	# Verifica se o player pressionou alguma tecla
 	li t1,0xFF200000		# carrega o endereco de controle do KDMMIO
@@ -330,6 +336,8 @@ CONT_GAMELOOP:
 	jr t0
 
 FINISH_GAMELOOP:	# faz algo
+	
+
 	la t0,GAMELOOP
 	jr t0
 
@@ -480,7 +488,9 @@ GAME_OVER:	# tela final de game over
 	li a3,0xC7CA	# cor azul
 	mv a0,s4	# score
 	ecall
-
+	
+	li t0,0xFF200604    # Escolhe o frame 0 ou 1
+	sw s11,0(t0)        # Troca de frame
 EXIT:	
 	li a7,10	# syscall de exit
 	ecall
