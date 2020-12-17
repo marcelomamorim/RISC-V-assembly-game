@@ -1,6 +1,6 @@
-# lógica da dificuldade do player 2
+# lï¿½gica da dificuldade do player 2
 
-.macro CPU_PLAYER() # verifica o nível atual e escolhe a respecitva dificuldade
+.macro CPU_PLAYER() # verifica o nï¿½vel atual e escolhe a respecitva dificuldade
 	beqz s10,T_DIFFICULTY_1	# NOVICE
 	
 	li t0,3
@@ -10,7 +10,7 @@
 	jr t0
 
 T_DIFFICULTY_1: # 1ST DAN - 2ND DAN
-	DIFFICULTY_3()
+	DIFFICULTY_1()
 	la t0,END
 	jr t0
 
@@ -101,8 +101,6 @@ P2_SOCO:
 	FINISH_P2()
 	addi s7,s7,1
 	YIN_YANG()
-
-	
 
 	la t0,P2_FIM
 	jr t0

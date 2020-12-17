@@ -135,8 +135,6 @@ GAME:
 	li s10,0	# fase 0
 	li s11,0	# frame 0
 
-	###
-
 	la t0,LOAD_LEVEL
 	jr t0
 	
@@ -159,7 +157,7 @@ T_NEXT_LEVEL: # intermediario pois o endere�o eh muito longo
 	jr t0
 	
 CONT_FINISH_GAME_P1:
-	la t0,GAME
+	la t0,LOAD_LEVEL
 	jr t0
 
 NEXT_LEVEL: # carrega a pr�xima fase
