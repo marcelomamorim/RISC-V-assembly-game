@@ -176,6 +176,8 @@ GAMELOOP:
 	
 	CPU_PLAYER() # player 2 executa algum movimento de acordo com o nível atual
 	
+	YIN_YANG()
+	
 	# Verifica se o player pressionou alguma tecla
 	li t1,0xFF200000		# carrega o endereco de controle do KDMMIO
 	lw t0,0(t1)			# le bit de Controle Teclado
