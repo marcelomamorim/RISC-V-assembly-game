@@ -3,6 +3,7 @@
 .include "./animations_player1.s"
 .include "./animations_player2.s"
 .include "./musics/musicaprincipal.s"
+.include "./enemy.s"
 .data
 .include "./sprites.s"
 
